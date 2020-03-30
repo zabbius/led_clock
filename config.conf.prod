@@ -1,0 +1,58 @@
+{
+    "Settings":
+    {
+        "LedClock":
+        {
+            "screen":
+            {
+                "device": "max7219",
+                "width": 32,
+                "height": 24,
+                "orientation": -90,
+                "contrast": 0
+            },
+            "apps":
+            {
+                "SimpleClock":
+                {
+                    "interval": 0.25
+                }
+            }
+        }
+    },
+    "Logging":
+    {
+        "root":
+        {
+            "handlers": ["common", "console"],
+            "level": "INFO"
+        },
+
+        "handlers":
+        {
+            "console": 
+            {
+                "class": "logging.StreamHandler",
+                "formatter": "common"
+            },
+            "common":
+            {
+                "class": "logging.handlers.RotatingFileHandler",
+                "formatter": "common",
+                "filename": "./log/trace.log",
+                "mode": "w",
+                "maxBytes": 1048576,
+                "backupCount": 5
+            }
+        },
+
+        "formatters":
+        {
+            "common":
+            {
+                "format": "%(asctime)s: %(threadName)s - %(name)s - %(levelname)s - %(message)s",
+                "class": "logging.Formatter"
+            }
+        }
+    }
+}

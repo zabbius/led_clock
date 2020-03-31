@@ -23,14 +23,13 @@ class SimpleClock(ClockApp):
 
         self.timer = SafeTimer(self.on_timer, max(0.1, self.config.get('interval', 0)))
 
-        self.font = []
+        self.font = [[0]] * (ord(':') + 1)
 
-        for ch in range(ord(':') + 1):
-            self.font.append(proportional(BIG_FONT)[ch])
+        for ch in range(ord('0'), ord('9') + 1):
+            self.font[ch] = BIG_FONT[ch]
+
         self.font[ord('\t')] = [0x00, 0x00, 0x00, 0x00, 0x00]
-        self.font[ord(':')].append(0x00)
-        self.font[ord(':')].append(0x00)
-        self.font[ord(':')].insert(0, 0x00)
+        self.font[ord(':')] = [0x00, 0x22, 0x00, 0x00, 0x00]
 
     def enter(self):
         self.clock_y = 0

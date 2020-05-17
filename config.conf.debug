@@ -1,7 +1,7 @@
 {
     "Settings":
     {
-        "LedClock":
+        "Core":
         {
             "screen":
             {
@@ -10,13 +10,27 @@
                 "height": 24,
                 "contrast": 64
             },
-            "apps":
+            "input":
             {
-                "SimpleClock":
-                {
-                    "interval": 0.25
-                }
+                "source": "emulator"
+            },
+            "plugins":
+            {
+                "faces_path": "./faces",
+                "apps_path": "./apps"
             }
+        },
+
+        "Faces":
+        {
+            "simple_clock":
+            {
+                "enabled": true,
+                "interval": 0.25
+            }
+        },
+        "Apps":
+        {
 
         }
     },

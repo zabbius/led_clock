@@ -3,12 +3,12 @@
 import logging
 
 
-class ClockApp:
-    def __init__(self, width, height, get_canvas, config):
+class ClockFace:
+    def __init__(self, config, width, height, get_canvas):
         self.width = width
         self.height = height
-        self.get_canvas = get_canvas
         self.config = config
+        self.get_canvas = get_canvas
 
     def start(self):
         pass
@@ -20,7 +20,4 @@ class ClockApp:
         pass
 
     def exit(self):
-        pass
-
-    def input(self, key):
         pass

@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 import logging
 
 from luma.core.legacy import text, textsize
-from luma.core.legacy.font import proportional
 
-from clock_app import ClockApp
-from fonts import BIG_FONT
+from core import ClockFace
+from shared.fonts import BIG_DIGITS
 from utils import SafeTimer
 
-import datetime
 
-
-class SimpleClock(ClockApp):
-    def __init__(self, width, height, get_canvas, config):
-        super().__init__(width, height, get_canvas, config)
-        self.logger = logging.getLogger("SimpleClock")
+class SimpleClock(ClockFace):
+    def __init__(self, config, *args, **kwargs):
+        super().__init__(config, *args, **kwargs)
+        self.logger = logging.getLogger(__class__.__name__)
 
         self.clock_y = 0
         self.clock_height = 7
@@ -26,7 +24,7 @@ class SimpleClock(ClockApp):
         self.font = [[0]] * (ord(':') + 1)
 
         for ch in range(ord('0'), ord('9') + 1):
-            self.font[ch] = BIG_FONT[ch]
+            self.font[ch] = BIG_DIGITS[ch]
 
         self.font[ord('\t')] = [0x00, 0x00, 0x00, 0x00, 0x00]
         self.font[ord(':')] = [0x00, 0x22, 0x00, 0x00, 0x00]
@@ -59,4 +57,5 @@ class SimpleClock(ClockApp):
             self.direction = -self.direction
 
 
-
+def create(*args, **kwargs):
+    return SimpleClock(*args, **kwargs)

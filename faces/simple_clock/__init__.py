@@ -3,6 +3,7 @@
 import datetime
 import logging
 
+from PIL import Image, ImageDraw
 from luma.core.legacy import text, textsize
 
 from core import ClockFace
@@ -48,8 +49,11 @@ class SimpleClock(ClockFace):
 
         x = (self.width - textsize(time_string, self.font)[0] + 1) / 2
 
-        with self.get_canvas() as canvas:
-            text(canvas, (x, self.clock_y), time_string, 255, self.font)
+        image = Image.new('1', (self.width, self.height))
+        canvas = ImageDraw.Draw(image)
+        text(canvas, (x, self.clock_y), time_string, 255, self.font)
+        del canvas
+        self.draw(image)
 
         self.clock_y += self.direction
 

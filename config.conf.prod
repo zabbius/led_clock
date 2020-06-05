@@ -1,7 +1,7 @@
 {
     "Settings":
     {
-        "LedClock":
+        "Core":
         {
             "screen":
             {
@@ -11,13 +11,33 @@
                 "orientation": -90,
                 "contrast": 0
             },
-            "apps":
+            "input":
             {
-                "SimpleClock":
-                {
-                    "interval": 0.25
-                }
+                "socket": "/var/run/lirc/lircd"
+            },
+            "plugins":
+            {
+                "faces_path": "./faces",
+                "apps_path": "./apps"
+            },
+            "transition":
+            {
+                "interval": 0.01,
+                "step": 3
             }
+        },
+
+        "Faces":
+        {
+            "simple_clock":
+            {
+                "enabled": true,
+                "interval": 0.25
+            }
+        },
+        "Apps":
+        {
+
         }
     },
     "Logging":

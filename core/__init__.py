@@ -1,4 +1,4 @@
-from .input_buttons import InputButtons
+from .constants import InputButtons
 from .clock_core import ClockCore
 from .clock_screen import ClockScreen
 from .clock_app import ClockApp

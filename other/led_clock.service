@@ -1,0 +1,9 @@
+[Unit]
+Description=Led clock
+After=lircd.service
+
+[Service]
+ExecStart=/opt/led_clock/led_clock.py
+
+[Install]
+WantedBy=multi-user.target

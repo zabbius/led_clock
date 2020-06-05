@@ -12,14 +12,21 @@
             },
             "input":
             {
-                "source": "emulator"
+                "socket": "/tmp/lirc_emulator"
             },
             "plugins":
             {
                 "faces_path": "./faces",
                 "apps_path": "./apps"
+            },
+
+            "transition":
+            {
+                "interval": 0.01,
+                "step": 3
             }
         },
+
 
         "Faces":
         {

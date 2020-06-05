@@ -17,3 +17,10 @@ class InputButtons:
     BTN_DOWN = b'BTN_DOWN'
     BTN_LEFT = b'BTN_LEFT'
     BTN_RIGHT = b'BTN_RIGHT'
+
+
+class TransitionDirections:
+    UP = "UP"
+    DOWN = "DOWN"
+    LEFT = "LEFT"
+    RIGHT = "RIGHT"

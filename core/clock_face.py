@@ -4,11 +4,11 @@ import logging
 
 
 class ClockFace:
-    def __init__(self, config, width, height, get_canvas):
+    def __init__(self, config, width, height, draw):
         self.width = width
         self.height = height
         self.config = config
-        self.get_canvas = get_canvas
+        self.draw = draw
 
     def start(self):
         pass

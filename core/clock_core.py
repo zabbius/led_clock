@@ -150,14 +150,16 @@ class ClockCore:
 
     def change_activity(self, activity, transition_direction):
         self.current_activity.exit()
+        self.transition_direction = transition_direction
+        current_image = self.primary_image
+
         self.current_activity = activity
         self.current_activity.enter()
 
         if transition_direction is None:
             return
 
-        self.secondary_image = self.primary_image
-        self.transition_direction = transition_direction
+        self.secondary_image = current_image
 
         self.primary_x = 0
         self.primary_y = 0

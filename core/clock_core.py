@@ -3,6 +3,7 @@
 import importlib.util
 import logging
 import os
+import threading
 
 from PIL import Image
 
@@ -14,7 +15,7 @@ from .constants import TransitionDirections
 
 
 class ClockCore:
-    def __init__(self, config, faces, apps):
+    def __init__(self, config, services_config, faces_config, apps_config):
         self.logger = logging.getLogger(__class__.__name__)
         self.config = config
 
@@ -23,22 +24,14 @@ class ClockCore:
 
         self.transition_timer = SafeTimer(self.on_transition_timer, transition_interval, 'transition')
 
-        self.faces_config = faces
-        self.apps_config = apps
-
         self.screen = ClockScreen(self.config['screen'])
         self.input = ClockInput(self.config['input'])
 
         self.input.on_input += self.on_input
 
-        self.faces_path = config['plugins']['faces_path']
-        self.apps_path = config['plugins']['apps_path']
-
-        self.faces = {}
-        self.apps = {}
-        self.faces_index = []
-
-        self.current_face_index = None
+        self.services = []
+        self.faces = []
+        self.apps = []
 
         self.current_activity = None
 
@@ -49,9 +42,30 @@ class ClockCore:
         self.primary_x = 0
         self.primary_y = 0
 
-        self.load_clock_faces()
+        self.logger.info("Loading services")
+        self.services = self.load_plugins(services_config, "services",
+                                          lambda create, name, conf: create(conf, self))
+        self.logger.info("Loading faces")
+        self.faces = self.load_plugins(faces_config, "faces",
+                                       lambda create, name, conf: create(conf, self, self.screen.width, self.screen.height))
+        self.logger.info("Loading apps")
+        self.apps = self.load_plugins(apps_config, "apps",
+                                      lambda create, name, conf: create(conf, self, self.screen.width, self.screen.height))
 
-    def draw(self, image, activity):
+        self.info = {}
+        self.info_lock = threading.Lock()
+
+        self.current_face_index = 0
+
+    def get_info(self, activity, key):
+        with self.info_lock:
+            return self.info.get(key)
+
+    def set_info(self, activity, key, value):
+        with self.info_lock:
+            self.info[key] = value
+
+    def draw(self, activity, image):
         if activity != self.current_activity:
             return
 
@@ -60,19 +74,17 @@ class ClockCore:
         if self.transition_direction is None:
             self.screen.display_image(image)
 
-    def load_clock_faces(self):
-        self.logger.info("Loading faces")
-        for (name, config) in self.faces_config.items():
+    def load_plugins(self, plugins, plugin_folder, factory):
+        result = []
+        for (name, config) in plugins.items():
+            if not config.get("enabled", True):
+                continue
+
             self.logger.debug("Loading {0}".format(name))
-            spec = importlib.util.spec_from_file_location(name, os.path.join(self.faces_path, name, '__init__.py'))
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
+            module = importlib.import_module("%s.%s" % (plugin_folder, name))
+            result.append(factory(module.create, name, config))
 
-            face = module.create(config, self.screen.width, self.screen.height, lambda image: self.draw(image, face))
-            self.faces[name] = face
-            self.faces_index.append(name)
-
-        self.current_face_index = 0
+        return result
 
     def on_input(self, btn):
         self.logger.debug("Got input: %s" % btn)
@@ -83,30 +95,30 @@ class ClockCore:
         transition_direction = None
 
         if btn == InputButtons.BTN_LEFT:
-            self.current_face_index -=1
+            self.current_face_index -= 1
             if self.current_face_index < 0:
-                self.current_face_index = len(self.faces_index) - 1
+                self.current_face_index = len(self.faces) - 1
             transition_direction = TransitionDirections.RIGHT
 
         if btn == InputButtons.BTN_RIGHT:
             self.current_face_index += 1
-            if self.current_face_index >= len(self.faces_index):
+            if self.current_face_index >= len(self.faces):
                 self.current_face_index = 0
             transition_direction = TransitionDirections.LEFT
 
         if btn == InputButtons.BTN_UP:
-            self.current_face_index -=1
+            self.current_face_index -= 1
             if self.current_face_index < 0:
-                self.current_face_index = len(self.faces_index) - 1
+                self.current_face_index = len(self.faces) - 1
             transition_direction = TransitionDirections.DOWN
 
         if btn == InputButtons.BTN_DOWN:
             self.current_face_index += 1
-            if self.current_face_index >= len(self.faces_index):
+            if self.current_face_index >= len(self.faces):
                 self.current_face_index = 0
             transition_direction = TransitionDirections.UP
 
-        self.change_activity(self.faces[self.faces_index[self.current_face_index]], transition_direction)
+        self.change_activity(self.faces[self.current_face_index], transition_direction)
 
     def restart_screen(self):
         self.logger.info("Restarting screen")
@@ -129,10 +141,14 @@ class ClockCore:
         self.screen.start()
         self.input.start()
 
-        for (name, face) in self.faces.items():
-            face.start()
+        for plugin in self.services:
+            plugin.start()
+        for plugin in self.faces:
+            plugin.start()
+        for plugin in self.apps:
+            plugin.start()
 
-        self.current_activity = self.faces[self.faces_index[self.current_face_index]]
+        self.current_activity = self.faces[self.current_face_index]
         self.current_activity.enter()
 
         self.logger.info("Started")
@@ -141,8 +157,12 @@ class ClockCore:
         self.logger.info("Stopping")
         self.current_activity.exit()
 
-        for (name, face) in self.faces.items():
-            face.stop()
+        for plugin in self.apps:
+            plugin.stop()
+        for plugin in self.faces:
+            plugin.stop()
+        for plugin in self.services:
+            plugin.stop()
 
         self.input.stop()
         self.screen.stop()

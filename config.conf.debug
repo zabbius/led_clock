@@ -5,7 +5,7 @@
         {
             "screen":
             {
-                "device": "emulator",
+                "mode": "emulator",
                 "width": 32,
                 "height": 24,
                 "contrast": 64
@@ -14,12 +14,6 @@
             {
                 "socket": "/tmp/lirc_emulator"
             },
-            "plugins":
-            {
-                "faces_path": "./faces",
-                "apps_path": "./apps"
-            },
-
             "transition":
             {
                 "interval": 0.01,
@@ -27,6 +21,19 @@
             }
         },
 
+        "Services":
+        {
+            "temperature_humidity":
+            {
+                "mode": "emulator",
+                "upper_temp": 30,
+                "lower_temp": -10,
+                "upper_hum": 30,
+                "lower_hum": -10,
+                "interval": 1
+
+            }
+        },
 
         "Faces":
         {
@@ -34,11 +41,15 @@
             {
                 "enabled": true,
                 "interval": 0.25
+            },
+            "humidity_and_temp":
+            {
+                "enabled": true,
+                "interval": 1
             }
         },
         "Apps":
         {
-
         }
     },
     "Logging":

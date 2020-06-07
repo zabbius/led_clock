@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     class Launcher(ServiceLauncher):
         def create_service(self, config):
-            return ClockCore(config['Core'], config['Faces'], config['Apps'])
+            return ClockCore(config['Core'], config['Services'], config['Faces'], config['Apps'])
 
         def add_arguments_to_parser(self, parser):
             pass

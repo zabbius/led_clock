@@ -5,7 +5,7 @@
         {
             "screen":
             {
-                "device": "max7219",
+                "mode": "max7219",
                 "width": 32,
                 "height": 24,
                 "orientation": -90,
@@ -15,11 +15,6 @@
             {
                 "socket": "/var/run/lirc/lircd"
             },
-            "plugins":
-            {
-                "faces_path": "./faces",
-                "apps_path": "./apps"
-            },
             "transition":
             {
                 "interval": 0.01,
@@ -27,12 +22,26 @@
             }
         },
 
+        "Services":
+        {
+            "temperature_humidity":
+            {
+                "mode": "si7021",
+                "address": 64,
+                "interval": 1
+            }
+        },
         "Faces":
         {
             "simple_clock":
             {
                 "enabled": true,
                 "interval": 0.25
+            },
+            "humidity_and_temp":
+            {
+                "enabled": true,
+                "interval": 1
             }
         },
         "Apps":

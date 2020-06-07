@@ -2,9 +2,6 @@
 
 import logging
 
-from PIL import Image
-from luma.core.virtual import viewport
-
 
 class ClockScreen:
     def __init__(self, config):
@@ -13,18 +10,18 @@ class ClockScreen:
 
         self.width = config['width']
         self.height = config['height']
-        self.deviceType = config['device']
+        self.mode = config['mode']
 
         self.device = None
 
     def start(self):
         self.logger.info("Starting")
 
-        if self.deviceType == 'emulator':
+        if self.mode == 'emulator':
             from luma.emulator.device import pygame
             self.device = pygame(self.width, self.height, 0, '1', "led_matrix")
 
-        elif self.deviceType == 'max7219':
+        elif self.mode == 'max7219':
             from luma.core.interface.serial import spi, noop
             from luma.led_matrix.device import max7219
 
@@ -32,7 +29,7 @@ class ClockScreen:
             self.device = max7219(serial, self.width, self.height, block_orientation=self.config['orientation'])
             self.device.contrast(self.config.get('contrast', 0) << 4)
         else:
-            raise Exception("Unsupported device")
+            raise Exception("Unsupported mode")
         self.logger.info("Started")
 
     def stop(self):

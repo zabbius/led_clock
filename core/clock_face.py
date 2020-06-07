@@ -2,22 +2,22 @@
 
 import logging
 
+from .clock_service import ClockService
 
-class ClockFace:
-    def __init__(self, config, width, height, draw):
+
+class ClockFace(ClockService):
+    def __init__(self, config, manager, width, height):
+        super().__init__(config, manager)
         self.width = width
         self.height = height
-        self.config = config
-        self.draw = draw
 
-    def start(self):
-        pass
-
-    def stop(self):
-        pass
+        self.draw = lambda image: manager.draw(self, image)
 
     def enter(self):
         pass
 
     def exit(self):
         pass
+
+
+

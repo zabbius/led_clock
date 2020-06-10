@@ -37,6 +37,14 @@
 
         "Faces":
         {
+            "analog_clock":
+            {
+                "enabled": true,
+                "interval": 0.25,
+                "hour_len": 6.5,
+                "minute_len": 8.5,
+                "second_len": 9.5
+            },
             "simple_clock":
             {
                 "enabled": true,

@@ -95,7 +95,11 @@ class AnalogClock(ClockFace):
 
         canvas.line([center_x, center_y, hour_x, hour_y], 255)
         canvas.line([center_x, center_y, minute_x, minute_y], 255)
-        canvas.point([second_x, second_y], 255)
+
+        if image.getpixel((second_x, second_y)):
+            canvas.point([second_x, second_y], 0)
+        else:
+            canvas.point([second_x, second_y], 255)
 
         canvas.ellipse([center_x - 1, center_y - 1, center_x + 1, center_y + 1], 0)
         canvas.point([center_x, center_y], 255)

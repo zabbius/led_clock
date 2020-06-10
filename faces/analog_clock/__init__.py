@@ -43,6 +43,11 @@ class AnalogClock(ClockFace):
             y = center - int(math.cos(h * math.pi / 6) * self.size / 2)
             canvas.point((x, y), 255)
 
+        canvas.point((self.size / 2, 1), 255)
+        canvas.point((self.size / 2, self.size - 2), 255)
+        canvas.point((1, self.size / 2), 255)
+        canvas.point((self.size - 2, self.size / 2), 255)
+
         del canvas
 
     def stop(self):

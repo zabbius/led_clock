@@ -19,5 +19,8 @@ class ClockFace(ClockService):
     def exit(self):
         pass
 
+    def receives_input(self):
+        return False
+
 
 

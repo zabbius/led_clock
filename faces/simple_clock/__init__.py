@@ -31,9 +31,6 @@ class SimpleClock(ClockFace):
         self.font[ord(':')] = [0x00, 0x22, 0x00, 0x00, 0x00]
 
     def enter(self):
-        self.clock_y = 0
-        self.clock_height = 7
-        self.direction = 1
         self.timer.start(True)
 
     def exit(self):

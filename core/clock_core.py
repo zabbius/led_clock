@@ -2,7 +2,6 @@
 
 import importlib.util
 import logging
-import os
 import threading
 
 from PIL import Image
@@ -15,6 +14,19 @@ from .constants import TransitionDirections
 
 
 class ClockCore:
+    AppIndex = [
+        InputButtons.BTN_1,
+        InputButtons.BTN_2,
+        InputButtons.BTN_3,
+        InputButtons.BTN_4,
+        InputButtons.BTN_5,
+        InputButtons.BTN_6,
+        InputButtons.BTN_7,
+        InputButtons.BTN_8,
+        InputButtons.BTN_9,
+        InputButtons.BTN_0,
+    ]
+
     def __init__(self, config, services_config, faces_config, apps_config):
         self.logger = logging.getLogger(__class__.__name__)
         self.config = config
@@ -92,6 +104,25 @@ class ClockCore:
         if btn == InputButtons.BTN_SHARP:
             self.restart_screen()
 
+        if self.current_activity.receives_input():
+            self.current_activity.input(btn)
+            return
+
+        app = None
+
+        try:
+            app_index = ClockCore.AppIndex.index(btn)
+            app = self.apps[app_index]
+
+        except IndexError:
+            pass
+        except ValueError:
+            pass
+
+        if app is not None:
+            self.open_app(app)
+            return
+
         transition_direction = None
 
         if btn == InputButtons.BTN_LEFT:
@@ -167,6 +198,15 @@ class ClockCore:
         self.input.stop()
         self.screen.stop()
         self.logger.info("Stopped")
+
+    def open_app(self, app):
+        self.change_activity(app, TransitionDirections.LEFT)
+
+    def close_app(self, app):
+        if app != self.current_activity:
+            return
+
+        self.change_activity(self.faces[self.current_face_index], TransitionDirections.RIGHT)
 
     def change_activity(self, activity, transition_direction):
         self.current_activity.exit()

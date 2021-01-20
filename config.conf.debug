@@ -58,6 +58,15 @@
         },
         "Apps":
         {
+            "test":
+            {
+                "enabled": true
+            },
+            "life":
+            {
+                "enabled": true,
+                "interval": 0.25
+            }
         }
     },
     "Logging":

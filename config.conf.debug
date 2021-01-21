@@ -58,10 +58,6 @@
         },
         "Apps":
         {
-            "test":
-            {
-                "enabled": true
-            },
             "life":
             {
                 "enabled": true,
@@ -71,6 +67,14 @@
                 "interval_step": 0.1,
                 "interval": 0.3,
                 "interval_bar_delay": 1
+            },
+
+            "snake":
+            {
+                "enabled": true,
+
+                "min_interval": 0.1,
+                "max_interval": 1.0
             }
         }
     },

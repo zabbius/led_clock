@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 class InputButtons:
     BTN_1 = b'BTN_1'

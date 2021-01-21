@@ -7,26 +7,13 @@ import threading
 from PIL import Image
 
 from utils import SafeTimer
-from . import InputButtons
 from .clock_input import ClockInput
 from .clock_screen import ClockScreen
-from .constants import TransitionDirections
+from .constants import InputButtons, TransitionDirections
+from .input_utils import InputUtils
 
 
 class ClockCore:
-    AppIndex = [
-        InputButtons.BTN_1,
-        InputButtons.BTN_2,
-        InputButtons.BTN_3,
-        InputButtons.BTN_4,
-        InputButtons.BTN_5,
-        InputButtons.BTN_6,
-        InputButtons.BTN_7,
-        InputButtons.BTN_8,
-        InputButtons.BTN_9,
-        InputButtons.BTN_0,
-    ]
-
     def __init__(self, config, services_config, faces_config, apps_config):
         self.logger = logging.getLogger(__class__.__name__)
         self.config = config
@@ -111,7 +98,7 @@ class ClockCore:
         app = None
 
         try:
-            app_index = ClockCore.AppIndex.index(btn)
+            app_index = InputUtils.NumericButtonsSequence.index(btn)
             app = self.apps[app_index]
 
         except IndexError:

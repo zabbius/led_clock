@@ -35,7 +35,7 @@ class LifeApp(ClockApp):
         self.cells = None
         self.new_cells = None
 
-        self.intervalBar = ProgressBar(-self.maxInterval, -self.minInterval, -self.interval, 4, (self.height - 8) / 2, self.width - 8, 8)
+        self.intervalBar = ProgressBar(ProgressBar.HORIZONTAL, -self.maxInterval, -self.minInterval, -self.interval, 4, (self.height - 8) / 2, self.width - 8, 8)
 
     def start(self):
         self.init_cells()

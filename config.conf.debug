@@ -75,6 +75,23 @@
 
                 "min_interval": 0.05,
                 "max_interval": 0.5
+            },
+            "flame":
+            {
+                "enabled": true,
+                "interval": 0.05,
+
+                "bar_delay": 1,
+
+                "min_hotspots": 2,
+                "max_hotspots": 16,
+                "hotspot_step": 2,
+                "hotspots": 6,
+
+                "min_value": 20,
+                "max_value": 200,
+                "value_step": 20,
+                "value": 40
             }
         }
     },

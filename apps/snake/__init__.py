@@ -35,11 +35,15 @@ class SnakeApp(ClockApp):
 
         self.btn = None
 
-        self.gameWidth = self.width - 2
+        self.gameWidth = self.width
         self.gameHeight = self.height - 6
 
-        self.font = [ x for x in ProportionalFont(MICRO_LETTERS, 2)]
-        self.font[ord('\t')] = [0x00]
+        self.main_font = [x for x in ProportionalFont(MICRO_LETTERS, 2)]
+        self.main_font[ord('\t')] = [0x00]
+
+        self.clock_font = MICRO_LETTERS[:(ord(':') + 1)]
+        self.clock_font[ord(':')] = self.main_font[ord(':')]
+        self.clock_font[ord(' ')] = self.main_font[ord(' ')]
 
     def start(self):
         self.init_game()
@@ -99,10 +103,10 @@ class SnakeApp(ClockApp):
         else:
             time_string = now.strftime("%H %M")
 
-        time_width = textsize(time_string, self.font)[0]
-        text(canvas, (self.width - time_width + 1, 0), time_string, 255, self.font)
+        time_width = textsize(time_string, self.clock_font)[0]
+        text(canvas, (self.width - time_width + 1, 0), time_string, 255, self.clock_font)
 
-        text(canvas, (0, 0), str(self.score), 255, self.font)
+        text(canvas, (0, 0), str(self.score), 255, self.main_font)
 
         canvas.point((self.apple[0], self.apple[1] + 6), 255)
         for x, y in self.snake:
@@ -110,7 +114,7 @@ class SnakeApp(ClockApp):
 
         if self.gameOver:
             canvas.rectangle((0, 13, self.width, 19), 0, 0)
-            text(canvas, (0, 14), "GAME\tOVER", 255, self.font)
+            text(canvas, (0, 14), "GAME\tOVER", 255, self.main_font)
 
         del canvas
         self.drawActivity(image)

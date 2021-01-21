@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import datetime
 import logging
 import random
 
 from PIL import Image, ImageDraw
-from luma.core.legacy import text, textsize
+from luma.core.legacy import text
 
+from components import MiniClock
 from core import ClockApp, InputButtons, InputUtils
 from shared.fonts import MICRO_LETTERS, ProportionalFont
-
 from utils import SafeTimer
 
 
@@ -41,9 +40,8 @@ class SnakeApp(ClockApp):
         self.main_font = [x for x in ProportionalFont(MICRO_LETTERS, 2)]
         self.main_font[ord('\t')] = [0x00]
 
-        self.clock_font = MICRO_LETTERS[:(ord(':') + 1)]
-        self.clock_font[ord(':')] = self.main_font[ord(':')]
-        self.clock_font[ord(' ')] = self.main_font[ord(' ')]
+        self.clock = MiniClock(0, 0)
+        self.clock.x = self.width - self.clock.width
 
     def start(self):
         self.init_game()
@@ -96,15 +94,7 @@ class SnakeApp(ClockApp):
         image = Image.new('1', (self.width, self.height))
         canvas = ImageDraw.Draw(image)
 
-        now = datetime.datetime.now()
-
-        if now.microsecond > 500000:
-            time_string = now.strftime("%H:%M")
-        else:
-            time_string = now.strftime("%H %M")
-
-        time_width = textsize(time_string, self.clock_font)[0]
-        text(canvas, (self.width - time_width + 1, 0), time_string, 255, self.clock_font)
+        self.clock.draw(canvas)
 
         text(canvas, (0, 0), str(self.score), 255, self.main_font)
 

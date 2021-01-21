@@ -7,6 +7,7 @@ import random
 import math
 from PIL import Image, ImageDraw
 
+from components.progress_bar import ProgressBar
 from core import ClockApp, InputButtons
 from utils import SafeTimer
 
@@ -16,9 +17,25 @@ class LifeApp(ClockApp):
         super().__init__(config, *args, **kwargs)
         self.logger = logging.getLogger(__class__.__name__)
 
-        self.timer = SafeTimer(self.on_timer, max(0.1, self.config.get('interval', 0)))
+        self.minInterval = self.config.get('min_interval', 0.1)
+        self.maxInterval = self.config.get('max_interval', 1.0)
+        self.intervalStep = self.config.get('interval_step', 0.1)
+
+        self.intervalBarDelay = self.config.get('interval_bar_delay', 1.0)
+
+        self.interval = self.config.get('interval', 0.3)
+
+        self.interval = min(self.interval, self.maxInterval)
+        self.interval = max(self.interval, self.minInterval)
+
+        self.lastIntervalChange = None
+
+        self.timer = SafeTimer(self.on_timer, self.interval)
+
         self.cells = None
         self.new_cells = None
+
+        self.intervalBar = ProgressBar(-self.maxInterval, -self.minInterval, -self.interval, 4, (self.height - 8) / 2, self.width - 8, 8)
 
     def start(self):
         self.init_cells()
@@ -42,16 +59,28 @@ class LifeApp(ClockApp):
                 count += 1
         return count
 
-    def on_timer(self):
+    def draw(self):
         image = Image.new('1', (self.width, self.height))
         canvas = ImageDraw.Draw(image)
-
-        anybody_alive = False
 
         for x in range(self.width):
             for y in range(self.height):
                 canvas.point((x, y), self.cells[x][y])
 
+        if (self.lastIntervalChange is not None
+                and (datetime.datetime.now() - self.lastIntervalChange).total_seconds() <= self.intervalBarDelay):
+            self.intervalBar.draw(canvas)
+
+        del canvas
+        self.drawActivity(image)
+
+    def on_timer(self):
+        anybody_alive = False
+
+        self.draw()
+
+        for x in range(self.width):
+            for y in range(self.height):
                 if self.cells[x][y]:
                     if self.near(x, y) not in (2, 3):
                         self.new_cells[x][y] = 0
@@ -63,9 +92,6 @@ class LifeApp(ClockApp):
                     anybody_alive = True
                 else:
                     self.new_cells[x][y] = 0
-
-        del canvas
-        self.draw(image)
 
         tmp = self.cells
         self.cells = self.new_cells
@@ -81,6 +107,26 @@ class LifeApp(ClockApp):
 
         if btn == InputButtons.BTN_OK:
             self.init_cells()
+
+        interval_changed = False
+
+        if btn == InputButtons.BTN_UP or btn == InputButtons.BTN_RIGHT:
+            self.interval -= self.intervalStep
+            interval_changed = True
+
+        if btn == InputButtons.BTN_DOWN or btn == InputButtons.BTN_LEFT:
+            self.interval += self.intervalStep
+            interval_changed = True
+
+        if interval_changed:
+            self.interval = min(self.interval, self.maxInterval)
+            self.interval = max(self.interval, self.minInterval)
+
+            self.timer.interval = self.interval
+            self.intervalBar.value = -self.interval
+
+            self.lastIntervalChange = datetime.datetime.now()
+            self.draw()
 
 
 def create(*args, **kwargs):

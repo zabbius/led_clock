@@ -104,7 +104,7 @@ class AnalogClock(ClockFace):
         canvas.ellipse([center_x - 1, center_y - 1, center_x + 1, center_y + 1], 0)
         canvas.point([center_x, center_y], 255)
         del canvas
-        self.draw(image)
+        self.drawActivity(image)
 
 
 def create(*args, **kwargs):

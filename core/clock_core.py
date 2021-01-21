@@ -77,7 +77,7 @@ class ClockCore:
         with self.info_lock:
             self.info[key] = value
 
-    def draw(self, activity, image):
+    def draw_activity(self, activity, image):
         if activity != self.current_activity:
             return
 

@@ -65,7 +65,12 @@
             "life":
             {
                 "enabled": true,
-                "interval": 0.25
+
+                "min_interval": 0.1,
+                "max_interval": 1.0,
+                "interval_step": 0.1,
+                "interval": 0.3,
+                "interval_bar_delay": 1
             }
         }
     },

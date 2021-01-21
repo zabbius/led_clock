@@ -34,7 +34,7 @@ class HumidityAndTemp(ClockFace):
         text(canvas, (0, 0), str(temperature), 255, self.font)
         text(canvas, (0, 8), str(humidity), 255, self.font)
         del canvas
-        self.draw(image)
+        self.drawActivity(image)
 
 
 def create(*args, **kwargs):

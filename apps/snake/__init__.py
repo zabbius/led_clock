@@ -10,7 +10,7 @@ from core import ClockApp, InputButtons
 from utils import SafeTimer
 
 
-class TestApp(ClockApp):
+class SnakeApp(ClockApp):
     def __init__(self, config, *args, **kwargs):
         super().__init__(config, *args, **kwargs)
         self.logger = logging.getLogger(__class__.__name__)
@@ -62,4 +62,4 @@ class TestApp(ClockApp):
 
 
 def create(*args, **kwargs):
-    return TestApp(*args, **kwargs)
+    return SnakeApp(*args, **kwargs)

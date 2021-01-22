@@ -15,6 +15,8 @@ class Emulator(ClockService):
         self.lower_temp = self.config['lower_temp']
         self.upper_hum = self.config['upper_hum']
         self.lower_hum = self.config['lower_hum']
+        self.upper_press = self.config['upper_press']
+        self.lower_press = self.config['lower_press']
 
         self.timer = SafeTimer(self.on_timer, max(1, self.config.get('interval', 0)))
 
@@ -30,9 +32,11 @@ class Emulator(ClockService):
 
     def on_timer(self):
         temperature = random.randint(self.lower_temp, self.upper_temp)
-        humidity = random.randint(0, 100)
+        humidity = random.randint(self.lower_hum, self.upper_hum)
+        pressure = random.randint(self.lower_press, self.upper_press)
 
-        self.logger.debug("Temperature: {0},  Humidity: {1}".format(temperature, humidity))
+        self.logger.debug("Temperature: {0},  Humidity: {1}, Pressure: {2}".format(temperature, humidity, pressure))
 
         self.set_info('temperature', temperature)
         self.set_info('humidity', humidity)
+        self.set_info('pressure', pressure)

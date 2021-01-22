@@ -24,10 +24,10 @@
 
         "Services":
         {
-            "temperature_humidity":
+            "weather_sensors":
             {
-                "mode": "si7021",
-                "address": 64,
+                "mode": "physical",
+                "smbus": 0,
                 "interval": 1
             }
         },
@@ -46,7 +46,7 @@
                 "minute_len": 8.5,
                 "second_len": 11
             },
-            "humidity_and_temp":
+            "weather":
             {
                 "enabled": true,
                 "interval": 1

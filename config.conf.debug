@@ -23,13 +23,15 @@
 
         "Services":
         {
-            "temperature_humidity":
+            "weather_sensors":
             {
                 "mode": "emulator",
                 "upper_temp": 30,
                 "lower_temp": -10,
                 "upper_hum": 30,
                 "lower_hum": -10,
+                "upper_press": 1100,
+                "lower_press": 900,
                 "interval": 1
 
             }
@@ -50,7 +52,7 @@
                 "enabled": true,
                 "interval": 0.25
             },
-            "humidity_and_temp":
+            "weather":
             {
                 "enabled": true,
                 "interval": 1

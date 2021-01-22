@@ -7,8 +7,8 @@ def create(config, *args, **kwargs):
         from .emulator import Emulator
         return Emulator(config, *args, **kwargs)
 
-    if config['mode'] == 'si7021':
-        from .si7021 import SI7021
-        return SI7021(config, *args, **kwargs)
+    if config['mode'] == 'physical':
+        from .physical import Physical
+        return Physical(config, *args, **kwargs)
 
     raise Exception("Unsupported mode")

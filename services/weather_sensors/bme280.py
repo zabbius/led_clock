@@ -40,10 +40,10 @@ class Bme280:
         raw_data = []
 
         for i in range(0x88, 0x88 + 24):
-            raw_data.append(self.bus.read_byte_data(i))
-        raw_data.append(self.bus.read_byte_data(0xA1))
+            raw_data.append(self.bus.read_byte_data(self.addr, i))
+        raw_data.append(self.bus.read_byte_data(self.addr, 0xA1))
         for i in range(0xE1, 0xE1 + 7):
-            raw_data.append(self.bus.read_byte_data(i))
+            raw_data.append(self.bus.read_byte_data(self.addr, i))
 
         self.calibration_t.append((raw_data[1] << 8) | raw_data[0])
         self.calibration_t.append((raw_data[3] << 8) | raw_data[2])
@@ -126,7 +126,7 @@ class Bme280:
     def read(self):
         data = []
         for i in range(0xF7, 0xF7 + 8):
-            data.append(self.bus.read_byte_data(i))
+            data.append(self.bus.read_byte_data(self.addr, i))
 
         pres_raw = (data[0] << 12) | (data[1] << 4) | (data[2] >> 4)
         temp_raw = (data[3] << 12) | (data[4] << 4) | (data[5] >> 4)

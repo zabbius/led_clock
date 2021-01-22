@@ -14,7 +14,7 @@ class Physical(ClockService):
         super().__init__(config, *args, **kwargs)
         self.logger = logging.getLogger(__class__.__name__)
 
-        self.busNumber = config['bus']
+        self.busNumber = config['smbus']
         self.timer = SafeTimer(self.on_timer, max(1, self.config.get('interval', 0)))
 
         self.smbus = None

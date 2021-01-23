@@ -42,9 +42,9 @@ class Weather(ClockFace):
 
         self.time.draw(canvas)
 
-        text(canvas, (0, 6), "T: {0}".format(temperature), 255, self.font)
-        text(canvas, (0, 12), "H: {0}".format(humidity), 255, self.font)
-        text(canvas, (0, 18), "P: {0}".format(pressure), 255, self.font)
+        text(canvas, (0, 7), "T: {0}".format(temperature), 255, self.font)
+        text(canvas, (0, 13), "H: {0}".format(humidity), 255, self.font)
+        text(canvas, (0, 19), "P: {0}".format(pressure), 255, self.font)
 
         del canvas
         self.drawActivity(image)

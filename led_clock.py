@@ -3,7 +3,7 @@
 
 import logging
 
-from core import ClockCore
+from core.clock_core import ClockCore
 
 if __name__ == "__main__":
     from utils import ServiceLauncher

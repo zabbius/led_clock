@@ -50,7 +50,7 @@ class SimpleClock(ClockFace):
         canvas = ImageDraw.Draw(image)
         text(canvas, (x, self.clock_y), time_string, 255, self.font)
         del canvas
-        self.drawActivity(image)
+        self.manager.draw_activity(self, image)
 
         self.clock_y += self.direction
 

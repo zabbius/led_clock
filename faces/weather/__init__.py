@@ -22,9 +22,8 @@ class Weather(ClockFace):
         self.font[ord('\t')] = [0x00]
 
         self.time = MiniClock(0, 0)
-        self.date = MiniDate(0, 0)
 
-        self.time.x = (self.width - self.date.width) // 2
+        self.time.x = (self.width - self.time.width) // 2
 
     def enter(self):
         self.timer.start(True)
@@ -33,21 +32,21 @@ class Weather(ClockFace):
         self.timer.stop()
 
     def on_timer(self):
-        temperature = self.get_info('temperature')
-        humidity = self.get_info('humidity')
-        pressure = self.get_info('pressure')
+        temperature = self.manager.get_info(self, 'temperature')
+        humidity = self.manager.get_info(self, 'humidity')
+        pressure = self.manager.get_info(self, 'pressure')
 
         image = Image.new('1', (self.width, self.height))
         canvas = ImageDraw.Draw(image)
 
         self.time.draw(canvas)
 
-        text(canvas, (0, 7), "T: {0}".format(temperature), 255, self.font)
-        text(canvas, (0, 13), "H: {0}".format(humidity), 255, self.font)
-        text(canvas, (0, 19), "P: {0}".format(pressure), 255, self.font)
+        text(canvas, (0, 7), "T: %d" % int(temperature), 255, self.font)
+        text(canvas, (0, 13), "H: %d" % int(humidity), 255, self.font)
+        text(canvas, (0, 19), "P: %d" % int(pressure), 255, self.font)
 
         del canvas
-        self.drawActivity(image)
+        self.manager.draw_activity(self, image)
 
 
 def create(*args, **kwargs):

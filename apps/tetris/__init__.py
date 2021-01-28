@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import datetime
 import logging
 
 import math
@@ -31,13 +30,9 @@ class TetrisApp(ClockApp):
         canvas = ImageDraw.Draw(image)
         canvas.point((self.x, self.y), 255)
         del canvas
-        self.drawActivity(image)
+        self.manager.draw_activity(self, image)
 
     def input(self, btn):
-        if btn == InputButtons.BTN_STAR:
-            self.close()
-            return
-
         if btn == InputButtons.BTN_LEFT:
             self.x -= 1
 

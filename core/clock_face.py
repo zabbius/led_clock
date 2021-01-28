@@ -11,8 +11,6 @@ class ClockFace(ClockService):
         self.width = width
         self.height = height
 
-        self.drawActivity = lambda image: manager.draw_activity(self, image)
-
     def enter(self):
         pass
 

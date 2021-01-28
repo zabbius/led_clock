@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import logging
+import time
 
 from smbus import SMBus
 from si7021 import Si7021
 from .bme280 import Bme280
 
-from core.clock_service import ClockService
+from core import ClockService
 from utils import SafeTimer
 
 
@@ -14,10 +15,13 @@ class Physical(ClockService):
         super().__init__(config, *args, **kwargs)
         self.logger = logging.getLogger(__class__.__name__)
 
-        self.busNumber = config['smbus']
+        self.busNumber = config.get('smbus', 0)
         self.timer = SafeTimer(self.on_timer, max(1, self.config.get('interval', 0)))
+        self.measureCycles = config.get('measure_cycles', 10)
 
         self.smbus = None
+    def start(self):
+
         self.si7021 = None
         self.bme208 = None
 
@@ -40,7 +44,7 @@ class Physical(ClockService):
         self.smbus = None
         self.logger.info("Stopped")
 
-    def on_timer(self):
+    def measure(self):
         hum1, temp1 = self.si7021.read()
         hum2, temp2, pres2 = self.bme208.read()
 
@@ -48,7 +52,25 @@ class Physical(ClockService):
         pressure = pres2
         humidity = hum1
 
+        return temperature, pressure, humidity
+
+    def on_timer(self):
+        temperature = 0
+        pressure = 0
+        humidity = 0
+
+        for n in range(self.measureCycles):
+            t, p, h = self.measure()
+            temperature += t
+            pressure += p
+            humidity += h
+            time.sleep(0.001)
+
+        temperature /= self.measureCycles
+        pressure /= self.measureCycles
+        humidity /= self.measureCycles
+
         self.logger.debug("Temperature: {0},  Humidity: {1}, Pressure: {2}".format(temperature, humidity, pressure))
-        self.set_info('temperature', temperature)
-        self.set_info('humidity', humidity)
-        self.set_info('pressure', pressure)
+        self.manager.set_info(self, 'temperature', temperature)
+        self.manager.set_info(self, 'humidity', humidity)
+        self.manager.set_info(self, 'pressure', pressure)

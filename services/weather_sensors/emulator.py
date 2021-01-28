@@ -37,6 +37,6 @@ class Emulator(ClockService):
 
         self.logger.debug("Temperature: {0},  Humidity: {1}, Pressure: {2}".format(temperature, humidity, pressure))
 
-        self.set_info('temperature', temperature)
-        self.set_info('humidity', humidity)
-        self.set_info('pressure', pressure)
+        self.manager.set_info(self,'temperature', temperature)
+        self.manager.set_info(self,'humidity', humidity)
+        self.manager.set_info(self,'pressure', pressure)

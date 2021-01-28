@@ -8,12 +8,11 @@ class ClockApp(ClockFace):
     def __init__(self, config, manager, *args, **kwargs):
         super().__init__(config, manager, *args, **kwargs)
 
-        self.close = lambda: manager.close_app(self)
-
     def input(self, btn):
-        if btn == InputButtons.BTN_STAR:
-            self.close()
-            return True
+        pass
 
     def receives_input(self):
         return True
+
+    def overrides_exit(self):
+        return False

@@ -19,6 +19,10 @@
             {
                 "interval": 0.01,
                 "step": 3
+            },
+            "storage":
+            {
+                "path": "./save"
             }
         },
 
@@ -28,7 +32,16 @@
             {
                 "mode": "physical",
                 "smbus": 0,
-                "interval": 1
+                "interval": 1,
+                "measure_cycles": 10
+            },
+            "weather_predictor":
+            {
+                "interval": 600,
+                "approx_size": 6,
+                "history_size": 144,
+                "delta_min": 250,
+                "delta_max": -250
             }
         },
         "Faces":
@@ -40,7 +53,7 @@
             },
             "analog_clock":
             {
-                "enabled": true,
+                "enabled": false,
                 "interval": 0.25,
                 "hour_len": 6.5,
                 "minute_len": 8.5,
@@ -54,8 +67,42 @@
         },
         "Apps":
         {
+            "life":
+            {
+                "enabled": true,
 
-        }
+                "min_interval": 0.1,
+                "max_interval": 1.0,
+                "interval_step": 0.1,
+                "interval": 0.3,
+                "interval_bar_delay": 1
+            },
+
+            "snake":
+            {
+                "enabled": true,
+
+                "min_interval": 0.05,
+                "max_interval": 0.5
+            },
+            "flame":
+            {
+                "enabled": true,
+                "interval": 0.05,
+
+                "bar_delay": 1,
+
+                "min_hotspots": 2,
+                "max_hotspots": 16,
+                "hotspot_step": 2,
+                "hotspots": 6,
+
+                "min_value": 20,
+                "max_value": 200,
+                "value_step": 20,
+                "value": 40
+            }
+       }
     },
     "Logging":
     {

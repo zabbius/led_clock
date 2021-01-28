@@ -86,7 +86,7 @@ class FlameTestApp(ClockApp):
             self.visibleBar.draw(canvas)
 
         del canvas
-        self.drawActivity(image)
+        self.manager.draw_activity(self, image)
 
     def on_timer(self):
         self.place_spots()
@@ -94,10 +94,6 @@ class FlameTestApp(ClockApp):
         self.draw()
 
     def input(self, btn):
-        if btn == InputButtons.BTN_STAR:
-            self.close()
-            return
-
         now = datetime.datetime.now()
 
         if btn == InputButtons.BTN_RIGHT:

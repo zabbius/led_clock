@@ -18,6 +18,10 @@
             {
                 "interval": 0.01,
                 "step": 3
+            },
+            "storage":
+            {
+                "path": "./save"
             }
         },
 
@@ -34,19 +38,19 @@
                 "lower_press": 900,
                 "interval": 1
 
+            },
+            "weather_predictor":
+            {
+                "interval": 600,
+                "approx_size": 6,
+                "history_size": 144,
+                "delta_min": 250,
+                "delta_max": -250
             }
         },
 
         "Faces":
         {
-            "analog_clock":
-            {
-                "enabled": true,
-                "interval": 0.25,
-                "hour_len": 6.5,
-                "minute_len": 8.5,
-                "second_len": 11
-            },
             "simple_clock":
             {
                 "enabled": true,
@@ -56,6 +60,14 @@
             {
                 "enabled": true,
                 "interval": 1
+            },
+            "analog_clock":
+            {
+                "enabled": false,
+                "interval": 0.25,
+                "hour_len": 6.5,
+                "minute_len": 8.5,
+                "second_len": 11
             }
         },
         "Apps":

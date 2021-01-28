@@ -9,6 +9,8 @@ from PIL import Image
 from utils import SafeTimer
 from .clock_input import ClockInput
 from .clock_screen import ClockScreen
+from .clock_storage import ClockStorage
+
 from .constants import InputButtons, TransitionDirections
 from .input_utils import InputUtils
 
@@ -25,6 +27,7 @@ class ClockCore:
 
         self.screen = ClockScreen(self.config['screen'])
         self.input = ClockInput(self.config['input'])
+        self.storage = ClockStorage(self.config['storage'])
 
         self.input.on_input += self.on_input
 
@@ -51,18 +54,13 @@ class ClockCore:
         self.apps = self.load_plugins(apps_config, "apps",
                                       lambda create, name, conf: create(conf, self, self.screen.width, self.screen.height))
 
-        self.info = {}
-        self.info_lock = threading.Lock()
-
         self.current_face_index = 0
 
     def get_info(self, activity, key):
-        with self.info_lock:
-            return self.info.get(key)
+        return self.storage.get_info(activity, key)
 
-    def set_info(self, activity, key, value):
-        with self.info_lock:
-            self.info[key] = value
+    def set_info(self, activity, key, value, store=False):
+        self.storage.set_info(activity, key, value, store)
 
     def draw_activity(self, activity, image):
         if activity != self.current_activity:
@@ -92,7 +90,10 @@ class ClockCore:
             self.restart_screen()
 
         if self.current_activity.receives_input():
-            self.current_activity.input(btn)
+            if not self.current_activity.overrides_exit() and btn == InputButtons.BTN_STAR:
+                self.close_app(self.current_activity)
+            else:
+                self.current_activity.input(btn)
             return
 
         app = None
@@ -158,6 +159,7 @@ class ClockCore:
 
         self.screen.start()
         self.input.start()
+        self.storage.start()
 
         for plugin in self.services:
             plugin.start()
@@ -182,6 +184,7 @@ class ClockCore:
         for plugin in self.services:
             plugin.stop()
 
+        self.storage.stop()
         self.input.stop()
         self.screen.stop()
         self.logger.info("Stopped")

@@ -107,7 +107,7 @@ class SnakeApp(ClockApp):
             text(canvas, (0, 14), "GAME\tOVER", 255, self.main_font)
 
         del canvas
-        self.drawActivity(image)
+        self.manager.draw_activity(self, image)
 
     def on_timer(self):
         if self.gameOver:
@@ -143,10 +143,6 @@ class SnakeApp(ClockApp):
         self.draw()
 
     def input(self, btn):
-        if btn == InputButtons.BTN_STAR:
-            self.close()
-            return
-
         if btn == InputButtons.BTN_OK:
             self.init_game()
             return

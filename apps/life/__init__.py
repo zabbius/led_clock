@@ -72,7 +72,7 @@ class LifeApp(ClockApp):
             self.intervalBar.draw(canvas)
 
         del canvas
-        self.drawActivity(image)
+        self.manager.draw_activity(self, image)
 
     def on_timer(self):
         anybody_alive = False
@@ -101,10 +101,6 @@ class LifeApp(ClockApp):
             self.init_cells()
 
     def input(self, btn):
-        if btn == InputButtons.BTN_STAR:
-            self.close()
-            return
-
         if btn == InputButtons.BTN_OK:
             self.init_cells()
 

@@ -18,6 +18,7 @@ class Physical(ClockService):
         self.busNumber = config.get('smbus', 0)
         self.timer = SafeTimer(self.on_timer, max(1, self.config.get('interval', 0)))
         self.measureCycles = config.get('measure_cycles', 10)
+        self.measureDelay = config.get('measure_delay', 0.01)
 
         self.smbus = None
     def start(self):
@@ -55,16 +56,18 @@ class Physical(ClockService):
         return temperature, pressure, humidity
 
     def on_timer(self):
-        temperature = 0
-        pressure = 0
-        humidity = 0
+        t, p, h = self.measure()
+        temperature = t
+        pressure = p
+        humidity = h
 
-        for n in range(self.measureCycles):
+
+        for n in range(1,self.measureCycles):
+            time.sleep(self.measureDelay)
             t, p, h = self.measure()
             temperature += t
             pressure += p
             humidity += h
-            time.sleep(0.001)
 
         temperature /= self.measureCycles
         pressure /= self.measureCycles
